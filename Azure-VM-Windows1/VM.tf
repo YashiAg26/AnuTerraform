@@ -75,19 +75,24 @@ resource "azurerm_windows_virtual_machine" "WindowsVM" {
     version   = "latest"
   }	*/
 }
-/*resource "azurerm_virtual_machine_extension" "disablingfirewall" {
+resource "azurerm_virtual_machine_extension" "disablingfirewall" {
   name                       = "extension1"
   virtual_machine_id         = azurerm_windows_virtual_machine.WindowsVM.id
   publisher                  = "Microsoft.Compute"
   type                       = "CustomScriptExtension"
   type_handler_version       = "1.9"
   
+  protected_settings = <<PROTECTED_SETTINGS
+    {
+      "commandToExecute": "powershell.exe -Command \"./chocolatey.ps1; exit 0;\""
+    }
+  PROTECTED_SETTINGS
+
   settings = <<SETTINGS
     {
-      "commandToExecute": "powershell -ExecutionPolicy Unrestricted",
-      "commandToExecute": "powershell -Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\services\SharedAccess\Parameters\FirewallPolicy\DomainProfile' -name "EnableFirewall" -Value 0", 
-      "commandToExecute": "powershell -Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\services\SharedAccess\Parameters\FirewallPolicy\PublicProfile' -name "EnableFirewall" -Value 0",
-      "commandToExecute": "powershell -Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\services\SharedAccess\Parameters\FirewallPolicy\Standardprofile' -name "EnableFirewall" -Value 0" 
+        "fileUris": [
+          "https://gist.githubusercontent.com/mcasperson/c815ac880df481418ff2e199ea1d0a46/raw/5d4fc583b28ecb27807d8ba90ec5f636387b00a3/chocolatey.ps1"
+        ]
     }
   SETTINGS
-}*/
+}
