@@ -84,7 +84,7 @@ resource "azurerm_virtual_machine_extension" "disablingfirewall" {
 
   settings = <<SETTINGS
     {
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File DisableWindowsFirewall.ps1",
+        "commandToExecute": "powershell "powershell.exe -Command \"./chocolatey.ps1; exit 0;\"",
         "fileUris": [
           "https://github.com/YashiAg26/AnuTerraform/blob/main/Azure-VM-Windows1/scripts/DisableWindowsFirewall.ps1"
         ]
