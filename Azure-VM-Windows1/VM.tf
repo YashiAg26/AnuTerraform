@@ -84,14 +84,14 @@ resource "azurerm_virtual_machine_extension" "disablingfirewall" {
   
   protected_settings = <<PROTECTED_SETTINGS
     {
-      "commandToExecute": "powershell.exe -Command \"./chocolatey.ps1; exit 0;\""
+      "commandToExecute": "powershell.exe -Command \"./WindowsFWdisable.ps1; exit 0;\""
     }
   PROTECTED_SETTINGS
 
   settings = <<SETTINGS
     {
         "fileUris": [
-          "https://gist.githubusercontent.com/mcasperson/c815ac880df481418ff2e199ea1d0a46/raw/5d4fc583b28ecb27807d8ba90ec5f636387b00a3/chocolatey.ps1"
+          "https://github.com/YashiAg26/AnuTerraform/blob/main/Azure-VM-Windows1/scripts/WindowsFWdisable.ps1"
         ]
     }
   SETTINGS
