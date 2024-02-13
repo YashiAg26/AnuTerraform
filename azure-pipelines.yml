@@ -1,0 +1,94 @@
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
+ 
+trigger: none
+ 
+pr: none
+ 
+parameters:
+  - name: Action
+    displayName: Action
+    type: string
+    default: 'Plan'
+    values:
+    - Plan
+    - Apply
+    - Destroy
+ 
+variables:
+  - name: backendServiceArm
+    value: 'Pay-As-You-Go (cbf8b966-9488-4fc7-a133-b65c3b0285a8)'
+  - name: backendAzureRmResourceGroupName
+    value: 'firewallrg'
+  - name: backendAzureRmStorageAccountName
+    value: 'firewallstg'
+  - name: backendAzureRmContainerName
+    value: 'firewallcontainer'
+  - name: backendAzureRmKey
+    value: 'terraform.tfstate'
+  - name: terraform_version
+    value: '1.0.10'
+  - name: action
+    value: ${{ parameters.Action }}
+ 
+stages :  
+  - stage: terraform_plan_apply
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - job: terraform_apply
+        steps:
+          - task: TerraformInstaller@0
+            displayName: 'install'
+            inputs:
+              terraformVersion: '${{ variables.terraform_version }}'
+          - task: TerraformTaskV2@2
+            displayName: 'init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: '${{ variables.backendServiceArm }}'
+              backendAzureRmResourceGroupName: '${{ variables.backendAzureRmResourceGroupName }}'
+              backendAzureRmStorageAccountName: '${{ variables.backendAzureRmStorageAccountName }}'
+              backendAzureRmContainerName: '${{ variables.backendAzureRmContainerName }}'
+              backendAzureRmKey: '${{ variables.backendAzureRmKey }}'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Azure-VM-Windows1/'
+          - task: TerraformTaskV2@2
+            displayName: 'plan'
+            condition: and(succeeded(), eq(variables['Action'], 'Plan'))
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: '${{ variables.backendServiceArm }}'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Azure-VM-Windows1/'
+          - task: TerraformTaskV2@2
+            displayName: 'apply'
+            condition: and(succeeded(), eq(variables['Action'], 'Apply'))
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: '${{ variables.backendServiceArm }}'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Azure-VM-Windows1/'
+ 
+  - stage: terraform_destroy
+    condition: contains('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - job: terraform_destroy
+        steps:
+          - task: TerraformTaskV2@2
+            displayName: 'init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: '${{ variables.backendServiceArm }}'
+              backendAzureRmResourceGroupName: '${{ variables.backendAzureRmResourceGroupName }}'
+              backendAzureRmStorageAccountName: '${{ variables.backendAzureRmStorageAccountName }}'
+              backendAzureRmContainerName: '${{ variables.backendAzureRmContainerName }}'
+              backendAzureRmKey: '${{ variables.backendAzureRmKey }}'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Azure-VM-Windows1/'
+          - task: TerraformTaskV2@2
+            displayName: 'destroy'
+            condition: and(succeeded(), eq(variables['action'], 'Destroy'))
+            inputs:
+              provider: 'azurerm'
+              command: 'destroy'
+              environmentServiceNameAzureRM: '${{ variables.backendServiceArm }}'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Azure-VM-Windows1/'
