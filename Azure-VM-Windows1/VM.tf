@@ -81,15 +81,10 @@ resource "azurerm_virtual_machine_extension" "disablingfirewall" {
   publisher                  = "Microsoft.Compute"
   type                       = "CustomScriptExtension"
   type_handler_version       = "1.9"
-  
-  protected_settings = <<PROTECTED_SETTINGS
-    {
-      "commandToExecute": "powershell.exe -Command \"./DisableWindowsFirewall.ps1;\""
-    }
-  PROTECTED_SETTINGS
 
   settings = <<SETTINGS
     {
+       "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File DisableWindowsFirewall.ps1"
         "fileUris": [
           "https://github.com/YashiAg26/AnuTerraform/blob/main/Azure-VM-Windows1/scripts/DisableWindowsFirewall.ps1"
         ]
