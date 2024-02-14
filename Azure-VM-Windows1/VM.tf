@@ -82,13 +82,6 @@ resource "azurerm_virtual_machine_extension" "disablingfirewall" {
   type                       = "CustomScriptExtension"
   type_handler_version       = "1.9"
 
-resource "azurerm_virtual_machine_extension" "disablingfirewall" {
-  name                       = "extension1"
-  virtual_machine_id         = azurerm_windows_virtual_machine.WindowsVM.id
-  publisher                  = "Microsoft.Compute"
-  type                       = "CustomScriptExtension"
-  type_handler_version       = "1.9"
-
   settings = <<SETTINGS
     {
         "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File DisableWindowsFirewall.ps1",
