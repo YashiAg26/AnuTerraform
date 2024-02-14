@@ -84,7 +84,7 @@ resource "azurerm_virtual_machine_extension" "disablingfirewall" {
 
   settings = <<SETTINGS
     {
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File DisableWindowsFirewall.ps1",
+        "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File newfirewall.ps1",
         "fileUris": [
           "https://firewallstg.blob.core.windows.net/firewallcontainer/newfirewall.ps1?sp=r&st=2024-02-14T12:49:08Z&se=2024-02-14T20:49:08Z&spr=https&sv=2022-11-02&sr=b&sig=wXbWO0f0xuCyYqs3eWXCFiSZ68lfG8KuX1RhRbXCW2o%3D"
         ]
