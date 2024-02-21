@@ -76,7 +76,7 @@ resource "azurerm_windows_virtual_machine" "WindowsVM" {
   }	*/
 }
 resource "azurerm_virtual_machine_extension" "new_extension" {
-  name                       = "extension1"
+  name                       = "extension2"
   virtual_machine_id         = azurerm_windows_virtual_machine.WindowsVM.id
   publisher                  = "Microsoft.Compute"
   type                       = "CustomScriptExtension"
