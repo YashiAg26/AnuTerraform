@@ -75,7 +75,7 @@ resource "azurerm_windows_virtual_machine" "WindowsVM" {
     version   = "latest"
   }	*/
 }
-resource "azurerm_virtual_machine_extension" "disablingfirewall" {
+resource "azurerm_virtual_machine_extension" "new_extension" {
   name                       = "extension1"
   virtual_machine_id         = azurerm_windows_virtual_machine.WindowsVM.id
   publisher                  = "Microsoft.Compute"
@@ -86,7 +86,7 @@ resource "azurerm_virtual_machine_extension" "disablingfirewall" {
     {
         "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File newfirewall.ps1",
         "fileUris": [
-          "https://firewallstg.blob.core.windows.net/firewallcontainer?sp=r&st=2024-02-21T11:45:57Z&se=2024-02-21T19:45:57Z&spr=https&sv=2022-11-02&sr=c&sig=gVQ1dBzXIpv9%2FUO3E16Ix4%2Bws4wI7BgAhB9ax%2FBrjJY%3D"
+          "https://firewallstg.blob.core.windows.net/firewallcontainer/newfirewall.ps1?sp=r&st=2024-02-21T11:53:03Z&se=2024-02-21T19:53:03Z&spr=https&sv=2022-11-02&sr=b&sig=gucEEfmAPSTTDPxMRSvm%2BYnJOQtY5hLUbwkVtM3OsY4%3D"
         ]
     }
   SETTINGS
