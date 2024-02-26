@@ -20,7 +20,7 @@ steps:
       $keyVaultName = "testlvkv"
       $keyVaultSpAppId = "cfa8b339-82a2-471a-a3c9-0fc0be7a4093"
       $storageAccountKey = "key1"
-      $userId = "admin@Mindtree226.onmicrosoft.com"
+      $userId = (Get-AzContext).Account.Id
       $storageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName
       
       Set-AzKeyVaultAccessPolicy -VaultName $keyVaultName -UserPrincipalName $userId -PermissionsToStorage get, list, delete, set, update, regeneratekey, getsas, listsas, deletesas, setsas, recover, backup, restore, purge
