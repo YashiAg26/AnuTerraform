@@ -20,7 +20,8 @@ steps:
       $keyVaultName = "testingkvlv"
       $keyVaultSpAppId = "cfa8b339-82a2-471a-a3c9-0fc0be7a4093"
       $storageAccountKey = "key1"
-      $userId = (Get-AzContext).Account.Id
+      
+      $userId = "admin@Mindtree226.onmicrosoft.com"
       $storageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName
       
       New-AzRoleAssignment -ApplicationId $keyVaultSpAppId -RoleDefinitionName 'Storage Account Key Operator Service Role' -Scope $storageAccount.Id
