@@ -1,0 +1,34 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzurePowerShell@5
+  inputs:
+    azureSubscription: 'anugrah pay as you go(1)(cbf8b966-9488-4fc7-a133-b65c3b0285a8)'
+    ScriptType: 'InlineScript'
+    Inline: |
+      $resourceGroupName = "test_group"
+      $storageAccountName = "testlvstg"
+      $keyVaultName = "testlvkv"
+      $keyVaultSpAppId = "cfa8b339-82a2-471a-a3c9-0fc0be7a4093"
+      $storageAccountKey = "key1"
+      $userId = "admin@Mindtree226.onmicrosoft.com"
+      $storageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName
+      
+      Set-AzKeyVaultAccessPolicy -VaultName $keyVaultName -UserPrincipalName $userId -PermissionsToStorage get, list, delete, set, update, regeneratekey, getsas, listsas, deletesas, setsas, recover, backup, restore, purge
+      
+      Add-AzKeyVaultManagedStorageAccount -VaultName $keyVaultName -AccountName $storageAccountName -AccountResourceId $storageAccount.Id -ActiveKeyName $storageAccountKey -DisableAutoRegenerateKey
+      
+      $regenPeriod = [System.Timespan]::FromDays(1)
+      
+      Add-AzKeyVaultManagedStorageAccount -VaultName $keyVaultName -AccountName $storageAccountName -AccountResourceId $storageAccount.Id -ActiveKeyName $storageAccountKey -RegenerationPeriod $regenPeriod
+    azurePowerShellVersion: 'LatestVersion'
+
